@@ -1,4 +1,4 @@
-import sys
+mport sys
 import re
 import time
 
@@ -9,7 +9,7 @@ def get_time(line):
     timestruct = time.strptime(timestamp+" 2011","%b %d %H:%M:%S %Y")
     timefloat = time.mktime(timestruct)
     return timefloat
-    
+
 
 def interval(start_tag,end_tag,afile):
     start = False
@@ -27,6 +27,8 @@ def interval(start_tag,end_tag,afile):
                 interval = end_time-start_time
                 print interval
                 time_list.append(interval)
+    print sum(time_list)/len(time_list)
 
 if len(sys.argv)==3:
     interval(sys.argv[1],sys.argv[2],sys.stdin)
+~                         

@@ -16,6 +16,7 @@ def interval(start_tag,end_tag,afile,options):
     start = False
     start_time,end_time=0,0
     time_list = []
+    errors=0
     for line in afile:
         if options.filter and not re.findall(options.filter,line):
             continue
@@ -24,12 +25,20 @@ def interval(start_tag,end_tag,afile,options):
                 start = True
                 start_time = get_time(line)
         else:
+            if re.findall(start_tag,line):
+                print "Oops!"
+                print line
+                errors+=1
+                start = True
+                start_time = get_time(line)
             if re.findall(end_tag,line):
                 start = False
                 end_time = get_time(line)
                 interval = end_time-start_time
                 print interval
                 time_list.append(interval)
+    time_list=filter(lambda x:x>=0,time_list)
+    print "errors",errors
     print sum(time_list)/len(time_list)
 
 def main(args):

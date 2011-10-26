@@ -3,6 +3,7 @@ import re
 import time
 
 def get_time(line):
+    print line
     match = re.findall("([A-Za-z]{3} [0-9]{2} ([0-9]{2}:?){3})",line)
     timestamp = match[0][0]
     timestruct = time.strptime(timestamp+" 2011","%b %d %H:%M:%S %Y")
@@ -13,6 +14,7 @@ def get_time(line):
 def interval(start_tag,end_tag,afile):
     start = False
     start_time,end_time=0,0
+    time_list = []
     for line in afile:
         if start == False:
             if re.findall(start_tag,line):
@@ -22,7 +24,9 @@ def interval(start_tag,end_tag,afile):
             if re.findall(end_tag,line):
                 start = False
                 end_time = get_time(line)
-                print end_time-start_time
+                interval = end_time-start_time
+                print interval
+                time_list.append(interval)
 
 if len(sys.argv)==3:
     interval(sys.argv[1],sys.argv[2],sys.stdin)

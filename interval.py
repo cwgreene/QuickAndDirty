@@ -1,6 +1,7 @@
-mport sys
+import sys
 import re
 import time
+import optparse
 
 def get_time(line):
     print line
@@ -11,11 +12,13 @@ def get_time(line):
     return timefloat
 
 
-def interval(start_tag,end_tag,afile):
+def interval(start_tag,end_tag,afile,options):
     start = False
     start_time,end_time=0,0
     time_list = []
     for line in afile:
+        if options.filter and not re.findall(options.filter,line):
+            continue
         if start == False:
             if re.findall(start_tag,line):
                 start = True
@@ -29,6 +32,12 @@ def interval(start_tag,end_tag,afile):
                 time_list.append(interval)
     print sum(time_list)/len(time_list)
 
-if len(sys.argv)==3:
-    interval(sys.argv[1],sys.argv[2],sys.stdin)
-~                         
+def main(args):
+    parser = optparse.OptionParser()
+    parser.add_option("-f",dest="filter",default=None)
+    options,args = parser.parse_args(args)
+    if len(args)==2:
+        interval(args[0],args[1],sys.stdin,options)
+
+if __name__=="__main__":
+    main(sys.argv[1:])
